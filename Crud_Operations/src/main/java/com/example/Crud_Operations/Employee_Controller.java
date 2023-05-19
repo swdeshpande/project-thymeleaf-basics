@@ -1,0 +1,73 @@
+package com.example.Crud_Operations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.util.List;
+
+@Controller
+public class Employee_Controller {
+  private final Employee_Repository employeeRepository;
+
+  @Autowired
+  public Employee_Controller(Employee_Repository employeeRepository) {
+    this.employeeRepository = employeeRepository;
+  }
+  
+  //home page and reference to add new employee
+  @GetMapping("/new")
+  public String showSignUpForm(Employee employee) {
+    return "add-employee";
+  }
+
+  //update employee
+  @GetMapping("/edit/{id}")
+  public String showUpdateForm(@PathVariable("id") long id, Model model) {
+    Employee employee =
+        employeeRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid employee Id:" + id));
+    model.addAttribute("employee", employee);
+    return "update-employee";
+  }
+
+  //delete employee
+  @GetMapping("/delete/{id}")
+  public String deleteUser(@PathVariable("id") long id, Model model) {
+    Employee employee =
+        employeeRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid employee Id:" + id));
+    employeeRepository.delete(employee);
+    model.addAttribute("employees", employeeRepository.findAll());
+    return "index";
+  }
+
+  //to add employee entry
+  @PostMapping("/addemployee")
+  public String addUser(@Valid Employee employee, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      return "add-employee";
+    }
+    employeeRepository.save(employee);
+    model.addAttribute("employees", employeeRepository.findAll());
+    return "index";
+  }
+
+  //to update employee entry
+  @PostMapping("/update/{id}")
+  public String updateUser(
+      @PathVariable("id") long id, @Valid Employee employee, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      employee.setId(id);
+      return "update-employee";
+    }
+    employeeRepository.save(employee);
+    model.addAttribute("employees", employeeRepository.findAll());
+    return "index";
+  }
+}
