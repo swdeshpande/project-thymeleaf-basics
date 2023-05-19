@@ -1,0 +1,5 @@
+package com.example.Hello_World_Thymeleaf;
+
+public class HelloWorldThymeleafController {
+
+}

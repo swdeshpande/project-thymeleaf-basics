@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Hello World</title>
+<style>
+body {
+  background-color: #E6E6FA;
+}
+</style>
+</head>
+<body>
+<center>
+	<h1 style="color:Red;" > Hello World </h1>
+	<h2 style="color:Green;"> Example Springboot with Thymeleaf </h2>
+</center>
+</body>
+</html>

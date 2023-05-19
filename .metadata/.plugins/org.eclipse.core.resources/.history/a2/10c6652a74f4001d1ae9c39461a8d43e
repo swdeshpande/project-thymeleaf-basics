@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Hello World</title>
+<style>
+body {
+  background-color: #E6E6FA;
+}
+</style>
+</head>
+<body>
+<center>
+	<h1>Hello World</h1>
+</center>
+</body>
+</html>

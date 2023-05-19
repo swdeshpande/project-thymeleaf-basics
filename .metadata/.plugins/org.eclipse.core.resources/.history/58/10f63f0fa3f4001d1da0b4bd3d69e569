@@ -1,0 +1,11 @@
+package com.example.Crud_Operations;
+
+@Repository
+public interface Employee_Repository extends JpaRepository<Customer, Long> {
+    
+    List<Customer> findByName(String name);
+    
+}
+public class  {
+
+}

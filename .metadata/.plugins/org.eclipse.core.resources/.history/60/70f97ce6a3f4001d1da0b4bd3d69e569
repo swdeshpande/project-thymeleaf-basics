@@ -1,0 +1,67 @@
+package com.example.Crud_Operations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.util.List;
+
+@Controller
+public class Employee_Controller {
+  private final Employee_Repository employeeRepository;
+
+  @Autowired
+  public Employee_Controller(Employee_Repository employeeRepository) {
+    this.employeeRepository = employeeRepository;
+  }
+
+  @GetMapping("/new")
+  public String showSignUpForm(Employee employee) {
+    return "add-employee";
+  }
+
+  @GetMapping("/edit/{id}")
+  public String showUpdateForm(@PathVariable("id") long id, Model model) {
+    Employee employee =
+        employeeRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid employee Id:" + id));
+    model.addAttribute("employee", employee);
+    return "update-employee";
+  }
+
+  @GetMapping("/delete/{id}")
+  public String deleteUser(@PathVariable("id") long id, Model model) {
+    Customer customer =
+        customerRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
+    customerRepository.delete(customer);
+    model.addAttribute("customers", customerRepository.findAll());
+    return "index";
+  }
+
+  @PostMapping("/addcustomer")
+  public String addUser(@Valid Customer customer, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      return "add-customer";
+    }
+    customerRepository.save(customer);
+    model.addAttribute("customers", customerRepository.findAll());
+    return "index";
+  }
+
+  @PostMapping("/update/{id}")
+  public String updateUser(
+      @PathVariable("id") long id, @Valid Customer customer, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      customer.setId(id);
+      return "update-customer";
+    }
+    customerRepository.save(customer);
+    model.addAttribute("customers", customerRepository.findAll());
+    return "index";
+  }
+}
